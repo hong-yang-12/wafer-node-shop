@@ -1,0 +1,53 @@
+const express = require("express");
+const app = express();
+
+app.use(express.json());
+
+let users = [
+  { id: 1, name: "mg mg", age: 20 },
+  { id: 2, name: "ag ag", age: 21 },
+  { id: 3, name: "tun tun", age: 22 },
+];
+
+app.get("/users", (req, res, next) => {
+  res.status(200).json({ users });
+});
+
+app.get("/user/:id", (req, res, next) => {
+  let id = req.params.id;
+  let user_id = users.find((user) => user.id == id);
+  if (user_id) res.status(200).json({ user_id });
+  else res.status(200).json({ msg: "No user with this Id." });
+});
+
+app.post("/user", (req, res) => {
+  let id = req.body.id;
+  let name = req.body.name;
+  let age = req.body.age;
+  let new_user = { id, name, age };
+  users.push(new_user);
+  // console.log(new_user);
+  res.status(200).json({ msg: "New User Added Success", users });
+});
+
+app.patch("/user/:id", (req, res) => {
+  let id = req.params.id;
+  let edit_user = users.find((user) => user.id == id);
+  if (edit_user) {
+    edit_user.name = req.body.name;
+    res.status(200).json({ msg: "user update success", users });
+  } else {
+    res.status(200).json({ msg: "no user with this id" });
+  }
+});
+app.delete("/user/:id", (req, res) => {
+  let id = req.params.id;
+  users = users.filter((user) => user.id != id);
+  res.json({ msg: "user deleted", users });
+});
+
+app.get("*", (req, res) => {
+  res.json({ msg: "No route found" });
+});
+
+app.listen(3000, console.log("server is running at port 3000"));
