@@ -1,39 +1,13 @@
 const router = require("express").Router();
+const controller = require("../controller/posts");
 
-router.get("/", (req, res) => {
-  res.json({ msg: "all posts" });
-});
-router.post("/", (req, res) => {
-  res.json(req.body);
-});
+router.get("/", controller.all);
+router.post("/", controller.post);
 
 router
   .route("/:id")
-  .get((req, res) => {
-    let id = req.params.id;
-    res.json({ msg: "requested id: " + id });
-  })
-  .patch((req, res) => {
-    let id = req.params.id;
-    res.json({ msg: "edit id: " + id });
-  })
-  .delete((req, res) => {
-    let id = req.params.id;
-    res.json({ msg: "delete id: " + id });
-  });
-
-// router.get("/:id", (req, res) => {
-//   let id = req.params.id;
-//   res.json({ msg: "requested id: " + id });
-// });
-
-// router.patch("/:id", (req, res) => {
-//   let id = req.params.id;
-//   res.json({ msg: "edit id: " + id });
-// });
-router.delete("/:id", (req, res) => {
-  let id = req.params.id;
-  res.json({ msg: "delete id: " + id });
-});
+  .get(controller.get)
+  .patch(controller.patch)
+  .delete(controller.drop);
 
 module.exports = router;
